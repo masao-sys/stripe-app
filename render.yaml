@@ -1,0 +1,27 @@
+databases:
+  - name: stripe_app_db
+    region: singapore
+    plan: free
+    databaseName: stripe_app_db
+    user: stripe_app_user
+
+services:
+  - type: web
+    name: stripe_app
+    env: python
+    region: singapore
+    buildCommand: './build.sh'
+    startCommand: 'gunicorn config.wsgi:application'
+    plan: free
+    branch: main
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: stripe_app_db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+    autoDeploy: true
