@@ -7,7 +7,7 @@ databases:
 
 services:
   - type: web
-    name: stripe_app
+    name: stripe-app
     env: python
     region: singapore
     buildCommand: './build.sh'
