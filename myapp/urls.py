@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from myapp.views import top, paid_registration, credit
+from myapp.views import top, credit
 
 urlpatterns = [
     path('', top.TopView.as_view(), name='top'),
