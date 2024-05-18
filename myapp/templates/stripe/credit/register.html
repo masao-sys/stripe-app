@@ -24,7 +24,7 @@
     </div>
 
     <script>
-        const stripe = Stripe('pk_test_51P8iLwIMz7ceLpaKBO9jiKsjwv28icUbbpUHvlIrLzn12r3ZrOnUDvFrfu2JYkFolkevtW4EvilHCnN1AyVtBLgW00F1RTMc8M');
+        const stripe = Stripe('{{ stripe_public_key }}');
         const elements = stripe.elements();
         const style = {
           base: {

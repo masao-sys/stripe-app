@@ -100,6 +100,7 @@ class CreditUpdateView(UserPassesTestMixin, View):
         ctx = {
             'card_brand': stripe_customer_json['brand'],
             'card_last4': stripe_customer_json['last4'],
+            'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
         }
         return render(request, 'stripe/credit/update.html', ctx)
 
