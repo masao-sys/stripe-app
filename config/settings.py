@@ -45,8 +45,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    # 3rd party apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
     # 追加
-    'stripe'
+    'myapp'
 ]
 
 MIDDLEWARE = [
@@ -74,9 +81,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -135,6 +148,96 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'myapp.CustomUser'
+
 SUPERUSER_NAME = env('SUPERUSER_NAME')
 SUPERUSER_EMAIL = env('SUPERUSER_EMAIL')
 SUPERUSER_PASSWORD = env('SUPERUSER_PASSWORD')
+SUPERUSER_FIRST_NAME = env('SUPERUSER_FIRST_NAME')
+SUPERUSER_LAST_NAME = env('SUPERUSER_LAST_NAME')
+
+###########
+# Logging #
+###########
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'local': {
+            'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'
+        },
+        'access_json': {
+            "format": '%(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'local',
+        },
+    },
+    'loggers': {
+        # 自作したログ出力
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'access_log': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # Djangoのエラー・警告・開発WEBサーバのアクセスログ
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        # 実行SQL
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}
+
+# sitesフレームワーク用のサイトID
+SITE_ID = 1
+
+# ログイン・ログアウト時のリダイレクト先
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+
+# allauth
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/account/login/?next=/email_authenticated/'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/email_authenticated/'
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+PASSWORD_RESET_TIMEOUT_DAYS = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# DEFAULT_FROM_EMAIL = 'hoge@hoge.com'
+# EMAIL_HOST_USER = 'hoge@hoge.com'
+# EMAIL_HOST_PASSWORD = 'password'
+# EMAIL_USE_TLS = True
+
+
+# stripe
+STRIPE_BASE_URL = 'https://api.stripe.com'
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_PRICE_ID = env('STRIPE_PRICE_ID')
+STRIPE_ACCOUNT_ID = env('STRIPE_ACCOUNT_ID')
