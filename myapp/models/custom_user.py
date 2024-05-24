@@ -3,7 +3,11 @@ from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 
-from myapp.common.enum import UserType
+
+class UserType(models.TextChoices):
+    FREE = 'FREE', '無料'
+    PAID = 'PAID', '有料'
+    SUPPORTER = 'SUPPORTER', 'サポーター'
 
 
 class CustomUserManager(BaseUserManager):

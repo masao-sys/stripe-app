@@ -8,8 +8,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View
 
-from myapp.common.enum import UserType
-from myapp.models import CustomUser
+from myapp.models import CustomUser, UserType
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
