@@ -31,7 +31,7 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -98,11 +98,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-default_dburl = 'sqlite:///' + str(BASE_DIR / 'db.sqlite3')
 
-DATABASES = {
-    'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
-}
+if DEBUG:
+    default_dburl = 'sqlite:///' + str(BASE_DIR / 'db.sqlite3')
+
+    DATABASES = {
+        'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'name',
+            'USER': 'user',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -226,11 +239,15 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 PASSWORD_RESET_TIMEOUT_DAYS = 1
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = env('MAILGUN_SMTP_SERVER')
-EMAIL_PORT = env('MAILGUN_SMTP_PORT')
-EMAIL_HOST_USER = env('MAILGUN_SMTP_LOGIN')
-EMAIL_HOST_PASSWORD = env('MAILGUN_SMTP_PASSWORD')
+# メール送信設定
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = env('MAILGUN_SMTP_SERVER')
+    EMAIL_PORT = env('MAILGUN_SMTP_PORT')
+    EMAIL_HOST_USER = env('MAILGUN_SMTP_LOGIN')
+    EMAIL_HOST_PASSWORD = env('MAILGUN_SMTP_PASSWORD')
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
 # DEFAULT_FROM_EMAIL = 'hoge@hoge.com'
