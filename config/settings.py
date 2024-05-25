@@ -15,7 +15,7 @@ from pathlib import Path
 import os
 import environ
 from decouple import config
-from dj_database_url import parse as dburl
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -100,18 +100,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 if DEBUG:
-    default_dburl = 'sqlite:///' + str(BASE_DIR / 'db.sqlite3')
-
-    DATABASES = {
-        'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
-    }
+    DATABASE_URL = 'sqlite:///' + str(BASE_DIR / 'db.sqlite3')
+    DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
 else:
-    import dj_database_url
-
-    db_from_env = dj_database_url.config()
-    DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
-    }
+    DATABASES = {'default': dj_database_url.config(conn_max_age=600, ssl_require=True)}
 
 
 # Password validation
