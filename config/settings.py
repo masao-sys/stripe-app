@@ -106,15 +106,11 @@ if DEBUG:
         'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
     }
 else:
+    import dj_database_url
+
+    db_from_env = dj_database_url.config()
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'name',
-            'USER': 'user',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
+        'default': dj_database_url.config()
     }
 
 
