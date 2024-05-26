@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1 class="center">アイテム一覧</h1>
+    <div>
+        <a href="{% url 'item-create' %}">新規作成</a>
+    </div>
+    <table>
+        <tr>
+            <th>名前</th>
+            <th>価格</th>
+            <th>在庫</th>
+            <th>操作</th>
+        </tr>
+        {% for item in object_list %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}</td>
+                <td><img src="{{ item.image.url }}"></td>
+                <td>
+                    <a href="{% url 'item-update' item.id %}">編集</a>
+                    <a href="{% url 'item-delete' item.id %}">削除</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

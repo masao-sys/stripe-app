@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    # 追加
+    'cloudinary_storage',
+
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
@@ -238,13 +241,20 @@ else:
     EMAIL_PORT = env('MAILGUN_SMTP_PORT')
     EMAIL_HOST_USER = env('MAILGUN_SMTP_LOGIN')
     EMAIL_HOST_PASSWORD = env('MAILGUN_SMTP_PASSWORD')
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# DEFAULT_FROM_EMAIL = 'hoge@hoge.com'
-# EMAIL_HOST_USER = 'hoge@hoge.com'
-# EMAIL_HOST_PASSWORD = 'password'
-# EMAIL_USE_TLS = True
 
+
+# メディアファイルの設定
+MEDIA_URL = '/media/'
+if DEBUG:
+    MEDIA_ROOT = BASE_DIR / 'media_local'
+else:
+    # cloudinary
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': 'hs4jhkidu',
+        'API_KEY': env('CLOUDINARY_API_KEY'),
+        'API_SECRET': env('CLOUDINARY_API_SECRET')
+    }
 
 # stripe
 STRIPE_BASE_URL = 'https://api.stripe.com'

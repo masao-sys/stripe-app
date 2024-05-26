@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Item 削除</h1>
+    <p>以下のItemを削除します。よろしいですか？</p>
+    <form action="{% url 'item-delete' item.id %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Item ID</th>
+                <td>{{ item.id }}</td>
+            </tr>
+            <tr>
+                <th>Item Name</th>
+                <td>{{ item.name }}</td>
+            </tr>
+            <tr>
+                <th>Item Price</th>
+                <td>{{ item.price }}</td>
+            </tr>
+        </table>
+        <input type="submit" value="削除">
+        <a href="{% url 'item-list' %}">一覧に戻る</a>
+    </form>
+
+{% endblock %}
