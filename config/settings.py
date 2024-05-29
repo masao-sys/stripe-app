@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     # 追加
     'cloudinary_storage',
+    'whitenoise.runserver_nostatic',
 
     'django.contrib.staticfiles',
     'django.contrib.sites',
@@ -61,8 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-    # 追加
+    # Herokuデプロイのために追加
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
