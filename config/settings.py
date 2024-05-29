@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     # 追加
     'cloudinary_storage',
-    'whitenoise.runserver_nostatic',
 
     'django.contrib.staticfiles',
     'django.contrib.sites',
@@ -55,6 +54,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'whitenoise.runserver_nostatic',
 
     # 追加
     'myapp'
