@@ -49,7 +49,6 @@ class CreditRegisterView(UserPassesTestMixin, View):
         custom_user = CustomUser.objects.get(email=email)
         custom_user.stripe_customer_id = customer.id
         custom_user.stripe_card_id = card.id
-        custom_user.stripe_card_last4_no = card.last4
         custom_user.stripe_subscription_id = subscription.id
         custom_user.user_type = UserType.PAID
         custom_user.save()
@@ -60,6 +59,9 @@ class CreditRegisterView(UserPassesTestMixin, View):
 class SubscriptionCancelView(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_paid
+
+    def handle_no_permission(self):
+        return redirect('top')
 
     raise_exception = False
     login_url = reverse_lazy('top')
@@ -84,6 +86,9 @@ class SubscriptionCancelView(UserPassesTestMixin, View):
 class CreditUpdateView(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_paid
+
+    def handle_no_permission(self):
+        return redirect('top')
 
     raise_exception = False
     login_url = reverse_lazy('top')
